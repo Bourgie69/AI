@@ -8,15 +8,36 @@ import Image from "next/image";
 import { useState } from "react";
 
 const ImageAnalysis = () => {
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState("")
+  const [isGenerating, setIsGenerating] = useState(false)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const previewUrl = URL.createObjectURL(file);
-    setImage(previewUrl);
+    setImagePreview(previewUrl);
+    setImage(file)
   };
+
+  const handleGenerate = async () => {
+    if (!image) return
+    setIsGenerating(true);
+
+    const form = new FormData()
+
+    form.append("image", image)
+
+    const result = await fetch("api/object-detection", {
+        method: "POST",
+        body: form
+    })
+
+    console.log(result.json())
+
+  }
+
   return (
     <div className="border">
       <div className="flex justify-between items-center">
@@ -28,7 +49,7 @@ const ImageAnalysis = () => {
         <Button
           className="bg-white border"
           onClick={() => {
-            setImage("");
+            setImage(null)
           }}
         >
           <ReloadIcon />
@@ -48,14 +69,14 @@ const ImageAnalysis = () => {
           />
         ) : (
           <img
-            src={image}
+            src={imagePreview}
             alt="Preview"
             className="w-50 h-50 object-cover rounded"
           />
         )}
       </div>
       <div className="w-full flex justify-end">
-        <Button>Generate</Button>
+        <Button onClick={handleGenerate}>Generate</Button>
       </div>
 
       <div className="flex flex-col justify-center gap-5">
