@@ -16,9 +16,15 @@ const ImageCreator = () => {
     setIsGenerating(true);
     const result = await fetch("api/image-creation", {
       method: "POST",
-      body: input,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ input }),
     });
-    console.log(result.json());
+    const data = await result.json();
+    console.log(data)
+
+    setIsGenerating(false)
   };
 
   return (
