@@ -6,7 +6,8 @@ const HF_TOKEN = process.env.NEXT_PUBLIC_HF_TOKEN || process.env.HF_TOKEN;
 
 const inference = new InferenceClient(HF_TOKEN || "");
 
-interface DetectionResult {
+
+type DetectionResult = {
   label: string;
   score: number;
   box: { xmin: number; ymin: number; xmax: number; ymax: number };

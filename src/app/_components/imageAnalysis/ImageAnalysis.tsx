@@ -39,7 +39,7 @@ const ImageAnalysis = () => {
   }
 
   return (
-    <div className="border">
+    <div className="">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-5">
           <StarIcon />
